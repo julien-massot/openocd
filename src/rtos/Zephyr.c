@@ -225,6 +225,13 @@ static struct Zephyr_params Zephyr_params_list[] = {
 		.cpu_saved_fp_stacking = &arm_cpu_saved_fp_stacking,
 	},
 	{
+		.target_name = "cortex_r4",
+		.pointer_width = 4,
+		.callee_saved_stacking = &arm_callee_saved_stacking,
+		.cpu_saved_nofp_stacking = &arm_cpu_saved_nofp_stacking,
+		.cpu_saved_fp_stacking = &arm_cpu_saved_fp_stacking,
+	},
+	{
 		.target_name = "arcv2",
 		.pointer_width = 4,
 		.callee_saved_stacking = &arc_callee_saved_stacking,
@@ -633,7 +640,7 @@ static int Zephyr_get_thread_reg_list(struct rtos *rtos, int64_t thread_id,
 		buf_cpy(stack_p, (*reg_list)[sp_offset].value, sizeof(uint32_t) * 8);
 	}
 	/* ARM Cortex-M-specific implementation */
-	else if (!strcmp(params->target_name, "cortex_m")) {
+	else if (!strcmp(params->target_name, "cortex_m") || !strcmp(params->target_name, "cortex_r4")) {
 		retval = rtos_generic_stack_read(rtos->target,
 				params->callee_saved_stacking,
 				addr, &callee_saved_reg_list,
